@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
+import settings
 
 
 class Genre(models.Model):
@@ -63,13 +64,14 @@ class MovieSession(models.Model):
 class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
-        to="User",
+        to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="orders"
     )
 
     def __str__(self) -> str:
-        return f"{self.created_at.strftime("%Y-%m-%d %H:%M:%S")}"
+        time = self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+        return f"{time}"
 
     class Meta:
         ordering = ["-created_at"]
